@@ -1,0 +1,21 @@
+{
+  "name": "fountain2html",
+  "version": "0.0.1",
+  "description": "A simple Node/JavaScript module to convert .fountain screenplays to HTML format, with non-latin charset support.",
+  "main": "fountain2html.js",
+  "repository": "git@github.com:wixette/fountain2html.git",
+  "author": "wixette <wixette@gmail.com>",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "eslint": "^9.24.0"
+  }
+}
