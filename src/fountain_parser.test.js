@@ -53,6 +53,18 @@ INT. HOUSE - DAY - FLASHBACK (1944) #110A#
 .SNIPER SCOPE POV
 `
 
+const TEXT_4 = `/* Centered examples. */
+>THE END<
+
+> THE END <
+
+>THE END  <
+
+>  THE END<
+
+    >THE END<
+`
+
 test('parser: empties and boneyards', () => {
   let result = parse('');
   assert.strictEqual(result.tokens.length, 0);
@@ -111,4 +123,24 @@ test('parser: scene heading', () => {
   assert.strictEqual(result.tokens[9].type, TokenType.SCENE_HEADING);
   assert.strictEqual(result.tokens[9].text, 'SNIPER SCOPE POV');
   assert.strictEqual(result.tokens[9].sceneNumber, null);
+});
+
+test('parser: scene heading', () => {
+  let result = parse(TEXT_4);
+  assert.strictEqual(result.tokens.length, 5);
+
+  assert.strictEqual(result.tokens[0].type, TokenType.CENTERED);
+  assert.strictEqual(result.tokens[0].text, 'THE END');
+
+  assert.strictEqual(result.tokens[1].type, TokenType.CENTERED);
+  assert.strictEqual(result.tokens[1].text, ' THE END ');
+
+  assert.strictEqual(result.tokens[2].type, TokenType.CENTERED);
+  assert.strictEqual(result.tokens[2].text, 'THE END  ');
+
+  assert.strictEqual(result.tokens[3].type, TokenType.CENTERED);
+  assert.strictEqual(result.tokens[3].text, '  THE END');
+
+  assert.strictEqual(result.tokens[4].type, TokenType.CENTERED);
+  assert.strictEqual(result.tokens[4].text, 'THE END');
 });

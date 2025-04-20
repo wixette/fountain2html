@@ -1,20 +1,25 @@
 const TokenType = {
-  TITLE: 'title',
-  CREDIT: 'credit',
+  // Scene heading types (sorted alphabetically).
   AUTHOR: 'author',
   AUTHORS: 'authors',
-  SOURCE: 'source',
-  NOTES: 'notes',
-  DRAFT_DATE: 'draft_date',
-  DATE: 'date',
   CONTACT: 'contact',
   COPYRIGHT: 'copyright',
+  CREDIT: 'credit',
+  DATE: 'date',
+  DRAFT_DATE: 'draft_date',
+  NOTES: 'notes',
+  SOURCE: 'source',
+  TITLE: 'title',
 
+  // Top-level types (sorted alphabetically).
+  CENTERED: 'centered',
   SCENE_HEADING: 'scene_heading',
 };
 
 const RE = {
+  // Sorted alphabetically.
   BONEYARD: /\/\*.*?\*\//gms,
+  CENTERED: /^(?:> *)(.+)(?: *<)(\n.+)*/g,
   EXTRA_LINE_BREAKS: /^\n+|\n+$/,
   EXTRA_WHITESPACES: /^\t+|^ {3,}/gm,
   LINE_BREAKS: /\r\n|\r/g,
@@ -75,6 +80,16 @@ function parse(fountainText) {
           sceneNumber: sceneNumber,
         });
       }
+      continue;
+    }
+
+    // Centered text.
+    matches = block.match(RE.CENTERED);
+    if (matches) {
+      tokenList.push({
+        type: TokenType.CENTERED,
+        text: matches[0].replace(/>|</g, ''),
+      });
       continue;
     }
   }
