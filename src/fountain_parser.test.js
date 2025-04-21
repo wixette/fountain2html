@@ -115,12 +115,46 @@ const TEXT_7 = `/* Sections and synopsis. */
 = This scene sets up Brick & Steel's new life as retirees. Warm sun, cold beer, and absolutely nothing to do.
 `
 
+const TEXT_8 = `/* Notes */
+
+[[It was supposed to be Vietnamese, right?]]
+
+[[It was supposed to be Vietnamese,
+  
+right?]]
+`
+
+const TEXT_9 = `/* Page breaks and line breaks*/
+
+===
+
+=====
+
+Action with two-space line break.
+  
+End of action.
+
+  
+`
+
+const TEXT_10 = `/* Actions */
+He opens the card. A simple little number inside of which is hand written:
+
+Scott exasperatedly throws down the card on the table and picks up the phone, hitting speed dial #1…
+`
+
 test('parser: empties and boneyards', () => {
   let result = parse('');
   assert.strictEqual(result.tokens.length, 0);
 
   result = parse(TEXT_1);
-  assert.strictEqual(result.tokens.length, 0);
+  assert.strictEqual(result.tokens.length, 2);
+
+  assert.strictEqual(result.tokens[0].type, TokenType.ACTION);
+  assert.strictEqual(result.tokens[0].text, 'Action line 1.\n  \nadditional text.');
+
+  assert.strictEqual(result.tokens[1].type, TokenType.ACTION);
+  assert.strictEqual(result.tokens[1].text, 'Action line 2.');
 });
 
 test('parser: title page', () => {
@@ -317,4 +351,38 @@ test('parser: sections and synopsis', () => {
 
   assert.strictEqual(result.tokens[4].type, TokenType.SYNOPSIS);
   assert.strictEqual(result.tokens[4].text, 'This scene sets up Brick & Steel\'s new life as retirees. Warm sun, cold beer, and absolutely nothing to do.');
+});
+
+test('parser: notes', () => {
+  let result = parse(TEXT_8);
+  assert.strictEqual(result.tokens.length, 2);
+
+  assert.strictEqual(result.tokens[0].type, TokenType.NOTE);
+  assert.strictEqual(result.tokens[0].text, 'It was supposed to be Vietnamese, right?');
+
+  assert.strictEqual(result.tokens[1].type, TokenType.NOTE);
+  assert.strictEqual(result.tokens[1].text, 'It was supposed to be Vietnamese,\n  \nright?');
+});
+
+test('parser: breaks', () => {
+  let result = parse(TEXT_9);
+  assert.strictEqual(result.tokens.length, 3);
+
+  assert.strictEqual(result.tokens[0].type, TokenType.PAGE_BREAK);
+
+  assert.strictEqual(result.tokens[1].type, TokenType.PAGE_BREAK);
+
+  assert.strictEqual(result.tokens[2].type, TokenType.ACTION);
+  assert.strictEqual(result.tokens[2].text, 'Action with two-space line break.\n  \nEnd of action.');
+});
+
+test('parser: actions', () => {
+  let result = parse(TEXT_10);
+  assert.strictEqual(result.tokens.length, 2);
+
+  assert.strictEqual(result.tokens[0].type, TokenType.ACTION);
+  assert.strictEqual(result.tokens[0].text, 'He opens the card. A simple little number inside of which is hand written:');
+
+  assert.strictEqual(result.tokens[1].type, TokenType.ACTION);
+  assert.strictEqual(result.tokens[1].text, 'Scott exasperatedly throws down the card on the table and picks up the phone, hitting speed dial #1…');
 });

@@ -12,6 +12,7 @@ const TokenType = {
   TITLE: 'title',
 
   // Top-level types (sorted alphabetically).
+  ACTION: 'action',
   CENTERED: 'centered',
   CHARACTER: 'character',
   DIALOGUE_BEGIN: 'dialogue_begin',
@@ -19,6 +20,9 @@ const TokenType = {
   DIALOGUE: 'dialogue',
   DUAL_DIALOGUE_BEGIN: 'dual_dialogue_begin',
   DUAL_DIALOGUE_END: 'dual_dialogue_end',
+  LINE_BREAK: 'line_break',
+  NOTE: 'note',
+  PAGE_BREAK: 'page_break',
   PARENTHETICAL: 'parenthetical',
   SCENE_HEADING: 'scene_heading',
   SECTION: 'section',
@@ -40,6 +44,8 @@ const RE = {
   EXTRA_LINE_BREAKS: /^\n+|\n+$/,
   EXTRA_WHITESPACES: /^\t+|^ {3,}/gm,
   LINE_BREAKS: /\r\n|\r/g,
+  NOTE: /^(?:\[{2}(?!\[+))(.+)?(?:\]{2})(?!\[+)$/s,
+  NOTE_INLINE: /(?:\[{2}(?!\[+))([\s\S]+?)(?:\]{2}(?!\[+))/g,
   PAGE_BREAK: /^={3,}$/,
   PARENTHETICAL: /^(\(.+\))$/,
   PARENTHETICAL_SPLITTER: /(\(.+\))(?:\n+)/,
@@ -184,7 +190,7 @@ function parse(fountainText) {
     if (matches) {
       tokenList.push({
         type: TokenType.SECTION,
-        text: matches[2],
+        text: matches[2].trim(),
         depth: matches[1].length,
       });
       continue;
@@ -195,9 +201,42 @@ function parse(fountainText) {
     if (matches) {
       tokenList.push({
         type: TokenType.SYNOPSIS,
-        text: matches[1],
+        text: matches[1].trim(),
       });
       continue;
+    }
+
+    console.log(block);
+
+    // Notes.
+    matches = block.trim().match(RE.NOTE)
+    if (matches) {
+      tokenList.push({
+        type: TokenType.NOTE,
+        text: matches[1].trim(),
+      });
+      continue;
+    }
+
+    // Page breaks.
+    if (RE.PAGE_BREAK.test(block)) {
+      tokenList.push({ type: TokenType.PAGE_BREAK });
+      continue;
+    }
+
+    // Line breaks
+    if (RE.TWO_SPACES_LINE_BREAK.test(block)) {
+      tokenList.push({ type: TokenType.LINE_BREAK });
+      continue;
+    }
+
+    // Finally, if no other type matches, treat it as an action.
+    const text = block.trim();
+    if (text) {
+      tokenList.push({
+        type: TokenType.ACTION,
+        text: text,
+      });
     }
   }
 
