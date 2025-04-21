@@ -231,7 +231,11 @@ function parse(fountainText) {
     }
 
     // Finally, if no other type matches, treat it as an action.
-    const text = block.trim();
+    let text = block.trim();
+    if (text.indexOf('!') === 0) {
+      // '!' can be used to force an action.
+      text = text.substring(1, text.length - 1);
+    }
     if (text) {
       tokenList.push({
         type: TokenType.ACTION,
