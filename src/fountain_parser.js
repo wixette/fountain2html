@@ -14,6 +14,7 @@ const TokenType = {
   // Top-level types (sorted alphabetically).
   CENTERED: 'centered',
   SCENE_HEADING: 'scene_heading',
+  TRANSITION: 'transition',
 };
 
 const RE = {
@@ -28,6 +29,7 @@ const RE = {
   SCENE_NUMBER: /( *#(.+)# *)/,
   SPLITTER: /\n{2,}/g,
   TITLE_PAGE: /^((?:title|credit|author[s]?|source|notes|draft date|date|contact|copyright):)/gim,
+  TRANSITION: /^((?:FADE (?:TO BLACK|OUT)|CUT TO BLACK)\.|.+ TO:)|^(?:> *)(.+)/,
   TWO_SPACES_LINE_BREAK: /^ {2}$/,
 };
 
@@ -63,7 +65,7 @@ function parse(fountainText) {
       continue;
     }
 
-    // Scene heading.
+    // Scene headings.
     matches = block.match(RE.SCENE_HEADING);
     if (matches) {
       let text = matches[1] || matches[2];
@@ -83,7 +85,7 @@ function parse(fountainText) {
       continue;
     }
 
-    // Centered text.
+    // Centered texts.
     matches = block.match(RE.CENTERED);
     if (matches) {
       tokenList.push({
@@ -92,6 +94,17 @@ function parse(fountainText) {
       });
       continue;
     }
+
+    // Transitions.
+    matches = block.match(RE.TRANSITION);
+    if (matches) {
+      tokenList.push({
+        type: TokenType.TRANSITION,
+        text: matches[1] || matches[2],
+      });
+      continue;
+    }
+
   }
 
   return {

@@ -65,6 +65,18 @@ const TEXT_4 = `/* Centered examples. */
     >THE END<
 `
 
+const TEXT_5 = `/* Transitions. */
+
+CUT TO:
+
+>Burn to White.
+
+FADE IN TO:
+
+    FADE OUT TO:
+
+`
+
 test('parser: empties and boneyards', () => {
   let result = parse('');
   assert.strictEqual(result.tokens.length, 0);
@@ -125,7 +137,7 @@ test('parser: scene heading', () => {
   assert.strictEqual(result.tokens[9].sceneNumber, null);
 });
 
-test('parser: scene heading', () => {
+test('parser: centered', () => {
   let result = parse(TEXT_4);
   assert.strictEqual(result.tokens.length, 5);
 
@@ -143,4 +155,21 @@ test('parser: scene heading', () => {
 
   assert.strictEqual(result.tokens[4].type, TokenType.CENTERED);
   assert.strictEqual(result.tokens[4].text, 'THE END');
+});
+
+test('parser: transition', () => {
+  let result = parse(TEXT_5);
+  assert.strictEqual(result.tokens.length, 4);
+
+  assert.strictEqual(result.tokens[0].type, TokenType.TRANSITION);
+  assert.strictEqual(result.tokens[0].text, 'CUT TO:');
+
+  assert.strictEqual(result.tokens[1].type, TokenType.TRANSITION);
+  assert.strictEqual(result.tokens[1].text, 'Burn to White.');
+
+  assert.strictEqual(result.tokens[2].type, TokenType.TRANSITION);
+  assert.strictEqual(result.tokens[2].text, 'FADE IN TO:');
+
+  assert.strictEqual(result.tokens[3].type, TokenType.TRANSITION);
+  assert.strictEqual(result.tokens[3].text, 'FADE OUT TO:');
 });
