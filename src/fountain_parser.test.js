@@ -141,6 +141,9 @@ const TEXT_10 = `/* Actions */
 He opens the card. A simple little number inside of which is hand written:
 
 Scott exasperatedly throws down the card on the table and picks up the phone, hitting speed dial #1…
+
+!END
+Three days.
 `
 
 test('parser: empties and boneyards', () => {
@@ -378,11 +381,14 @@ test('parser: breaks', () => {
 
 test('parser: actions', () => {
   let result = parse(TEXT_10);
-  assert.strictEqual(result.tokens.length, 2);
+  assert.strictEqual(result.tokens.length, 3);
 
   assert.strictEqual(result.tokens[0].type, TokenType.ACTION);
   assert.strictEqual(result.tokens[0].text, 'He opens the card. A simple little number inside of which is hand written:');
 
   assert.strictEqual(result.tokens[1].type, TokenType.ACTION);
   assert.strictEqual(result.tokens[1].text, 'Scott exasperatedly throws down the card on the table and picks up the phone, hitting speed dial #1…');
+
+  assert.strictEqual(result.tokens[2].type, TokenType.ACTION);
+  assert.strictEqual(result.tokens[2].text, 'END\nThree days.');
 });
