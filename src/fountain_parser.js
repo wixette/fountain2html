@@ -231,6 +231,11 @@ function parse(fountainText) {
     }
 
     // Finally, if no other type matches, treat it as an action.
+    //
+    // TODO: Support indent in Actions.
+    //
+    // Why isn't indent supported in actions? ....replace(RE.EXTRA_WHITESPACES,
+    // '') removes the indents before tokenizing.
     let text = block.trim();
     if (text.indexOf('!') === 0) {
       // '!' can be used to force an action.
@@ -246,6 +251,10 @@ function parse(fountainText) {
 
   // Reverses the token list to restore the original order.
   tokenList.reverse();
+
+  // TODO: Implement inline-post-processing here.
+
+  // TODO: Add metadata.
 
   return {
     tokens: tokenList,
