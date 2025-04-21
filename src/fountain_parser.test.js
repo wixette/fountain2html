@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import test from 'node:test';
-import { parse, TokenType } from './fountain_parser.js';
+import { parse, TokenType, DualPosition } from './fountain_parser.js';
 
 const TEXT_1 = `/*
 Line break and boneyard test
@@ -101,6 +101,18 @@ Screw retirement.
 
 @non-capitalized character
 Screw retirement.
+`
+
+const TEXT_7 = `/* Sections and synopsis. */
+# Section 1
+
+## Section 2
+
+### Section 3
+
+= Set up the characters and the story.
+
+= This scene sets up Brick & Steel's new life as retirees. Warm sun, cold beer, and absolutely nothing to do.
 `
 
 test('parser: empties and boneyards', () => {
@@ -205,7 +217,7 @@ test('parser: dialogues', () => {
   assert.strictEqual(result.tokens.length, 29);
 
   assert.strictEqual(result.tokens[0].type, TokenType.DIALOGUE_BEGIN);
-  assert.strictEqual(result.tokens[0].dual, undefined);
+  assert.strictEqual(result.tokens[0].dual, DualPosition.UNKNOWN);
 
   assert.strictEqual(result.tokens[1].type, TokenType.CHARACTER);
   assert.strictEqual(result.tokens[1].text, 'SANBORN');
@@ -216,7 +228,7 @@ test('parser: dialogues', () => {
   assert.strictEqual(result.tokens[3].type, TokenType.DIALOGUE_END);
 
   assert.strictEqual(result.tokens[4].type, TokenType.DIALOGUE_BEGIN);
-  assert.strictEqual(result.tokens[4].dual, undefined);
+  assert.strictEqual(result.tokens[4].dual, DualPosition.UNKNOWN);
 
   assert.strictEqual(result.tokens[5].type, TokenType.CHARACTER);
   assert.strictEqual(result.tokens[5].text, 'DAN');
@@ -227,7 +239,7 @@ test('parser: dialogues', () => {
   assert.strictEqual(result.tokens[7].type, TokenType.DIALOGUE_END);
 
   assert.strictEqual(result.tokens[8].type, TokenType.DIALOGUE_BEGIN);
-  assert.strictEqual(result.tokens[8].dual, undefined);
+  assert.strictEqual(result.tokens[8].dual, DualPosition.UNKNOWN);
 
   assert.strictEqual(result.tokens[9].type, TokenType.CHARACTER);
   assert.strictEqual(result.tokens[9].text, 'STEEL');
@@ -249,7 +261,7 @@ test('parser: dialogues', () => {
   assert.strictEqual(result.tokens[15].type, TokenType.DUAL_DIALOGUE_BEGIN);
 
   assert.strictEqual(result.tokens[16].type, TokenType.DIALOGUE_BEGIN);
-  assert.strictEqual(result.tokens[16].dual, 'left');
+  assert.strictEqual(result.tokens[16].dual, DualPosition.LEFT);
 
   assert.strictEqual(result.tokens[17].type, TokenType.CHARACTER);
   assert.strictEqual(result.tokens[17].text, 'BRICK');
@@ -260,7 +272,7 @@ test('parser: dialogues', () => {
   assert.strictEqual(result.tokens[19].type, TokenType.DIALOGUE_END);
 
   assert.strictEqual(result.tokens[20].type, TokenType.DIALOGUE_BEGIN);
-  assert.strictEqual(result.tokens[20].dual, 'right');
+  assert.strictEqual(result.tokens[20].dual, DualPosition.RIGHT);
 
   assert.strictEqual(result.tokens[21].type, TokenType.CHARACTER);
   assert.strictEqual(result.tokens[21].text, 'STEEL');
@@ -273,7 +285,7 @@ test('parser: dialogues', () => {
   assert.strictEqual(result.tokens[24].type, TokenType.DUAL_DIALOGUE_END);
 
   assert.strictEqual(result.tokens[25].type, TokenType.DIALOGUE_BEGIN);
-  assert.strictEqual(result.tokens[25].dual, undefined);
+  assert.strictEqual(result.tokens[25].dual, DualPosition.UNKNOWN);
 
   assert.strictEqual(result.tokens[26].type, TokenType.CHARACTER);
   assert.strictEqual(result.tokens[26].text, 'non-capitalized character');
@@ -282,4 +294,27 @@ test('parser: dialogues', () => {
   assert.strictEqual(result.tokens[27].text, 'Screw retirement.');
 
   assert.strictEqual(result.tokens[28].type, TokenType.DIALOGUE_END);
+});
+
+test('parser: sections and synopsis', () => {
+  let result = parse(TEXT_7);
+  assert.strictEqual(result.tokens.length, 5);
+
+  assert.strictEqual(result.tokens[0].type, TokenType.SECTION);
+  assert.strictEqual(result.tokens[0].text, 'Section 1');
+  assert.strictEqual(result.tokens[0].depth, 1);
+
+  assert.strictEqual(result.tokens[1].type, TokenType.SECTION);
+  assert.strictEqual(result.tokens[1].text, 'Section 2');
+  assert.strictEqual(result.tokens[1].depth, 2);
+
+  assert.strictEqual(result.tokens[2].type, TokenType.SECTION);
+  assert.strictEqual(result.tokens[2].text, 'Section 3');
+  assert.strictEqual(result.tokens[2].depth, 3);
+
+  assert.strictEqual(result.tokens[3].type, TokenType.SYNOPSIS);
+  assert.strictEqual(result.tokens[3].text, 'Set up the characters and the story.');
+
+  assert.strictEqual(result.tokens[4].type, TokenType.SYNOPSIS);
+  assert.strictEqual(result.tokens[4].text, 'This scene sets up Brick & Steel\'s new life as retirees. Warm sun, cold beer, and absolutely nothing to do.');
 });

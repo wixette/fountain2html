@@ -21,7 +21,15 @@ const TokenType = {
   DUAL_DIALOGUE_END: 'dual_dialogue_end',
   PARENTHETICAL: 'parenthetical',
   SCENE_HEADING: 'scene_heading',
+  SECTION: 'section',
+  SYNOPSIS: 'synopsis',
   TRANSITION: 'transition',
+};
+
+const DualPosition = {
+  LEFT: 'left',
+  RIGHT: 'right',
+  UNKNOWN: 'unknown',
 };
 
 const RE = {
@@ -37,7 +45,9 @@ const RE = {
   PARENTHETICAL_SPLITTER: /(\(.+\))(?:\n+)/,
   SCENE_HEADING: /^((?:\*{0,3}_?)?(?:(?:int|ext|est|i\/e)[. ]).+)|^(?:\.(?!\.+))(.+)/i,
   SCENE_NUMBER: /( *#(.+)# *)/,
+  SECTION: /^(#+)(?: *)(.*)/,
   SPLITTER: /\n{2,}/g,
+  SYNOPSIS: /^(?:=(?!=+) *)(.*)/,
   TITLE_PAGE: /^((?:title|credit|author[s]?|source|notes|draft date|date|contact|copyright):)/gim,
   TRANSITION: /^((?:FADE (?:TO BLACK|OUT)|CUT TO BLACK)\.|.+ TO:)|^(?:> *)(.+)/,
   TWO_SPACES_LINE_BREAK: /^ {2}$/,
@@ -142,7 +152,8 @@ function parse(fountainText) {
           tokenList.push({
             type: RE.PARENTHETICAL.test(text) ?
                 TokenType.PARENTHETICAL : TokenType.DIALOGUE,
-            text: text.trim() });
+            text: text.trim(),
+          });
         }
       }
 
@@ -151,12 +162,13 @@ function parse(fountainText) {
       }
       tokenList.push({
         type: TokenType.CHARACTER,
-        text: matches[1].trim()
+        text: matches[1].trim(),
       });
 
       tokenList.push({
         type: TokenType.DIALOGUE_BEGIN,
-        dual: matches[2] ? 'right' : dual ? 'left' : undefined
+        dual: matches[2] ? DualPosition.RIGHT :
+                dual ? DualPosition.LEFT : DualPosition.UNKNOWN,
       });
 
       if (dual) {
@@ -164,6 +176,27 @@ function parse(fountainText) {
       }
 
       dual = matches[2] ? true : false;
+      continue;
+    }
+
+    // Sections.
+    matches = block.match(RE.SECTION);
+    if (matches) {
+      tokenList.push({
+        type: TokenType.SECTION,
+        text: matches[2],
+        depth: matches[1].length,
+      });
+      continue;
+    }
+
+    // Synopsis.
+    matches = block.match(RE.SYNOPSIS);
+    if (matches) {
+      tokenList.push({
+        type: TokenType.SYNOPSIS,
+        text: matches[1],
+      });
       continue;
     }
   }
@@ -179,5 +212,6 @@ function parse(fountainText) {
 
 export {
   parse,
+  DualPosition,
   TokenType,
 };
