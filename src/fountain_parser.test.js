@@ -77,6 +77,32 @@ FADE IN TO:
 
 `
 
+const TEXT_6 = `/* Dialogues and dual dialogues. */
+
+SANBORN
+You know, loves the Army, blood runs green. Country boy. Seems solid.
+
+DAN
+Then let's retire them.
+_Permanently_.
+
+STEEL
+(starting the engine)
+So much for retirement!
+So much for retirement!
+(continue)
+Damn it.
+
+BRICK
+Screw retirement.
+
+STEEL ^
+Screw retirement.
+
+@non-capitalized character
+Screw retirement.
+`
+
 test('parser: empties and boneyards', () => {
   let result = parse('');
   assert.strictEqual(result.tokens.length, 0);
@@ -172,4 +198,88 @@ test('parser: transition', () => {
 
   assert.strictEqual(result.tokens[3].type, TokenType.TRANSITION);
   assert.strictEqual(result.tokens[3].text, 'FADE OUT TO:');
+});
+
+test('parser: dialogues', () => {
+  let result = parse(TEXT_6);
+  assert.strictEqual(result.tokens.length, 29);
+
+  assert.strictEqual(result.tokens[0].type, TokenType.DIALOGUE_BEGIN);
+  assert.strictEqual(result.tokens[0].dual, undefined);
+
+  assert.strictEqual(result.tokens[1].type, TokenType.CHARACTER);
+  assert.strictEqual(result.tokens[1].text, 'SANBORN');
+
+  assert.strictEqual(result.tokens[2].type, TokenType.DIALOGUE);
+  assert.strictEqual(result.tokens[2].text, 'You know, loves the Army, blood runs green. Country boy. Seems solid.');
+
+  assert.strictEqual(result.tokens[3].type, TokenType.DIALOGUE_END);
+
+  assert.strictEqual(result.tokens[4].type, TokenType.DIALOGUE_BEGIN);
+  assert.strictEqual(result.tokens[4].dual, undefined);
+
+  assert.strictEqual(result.tokens[5].type, TokenType.CHARACTER);
+  assert.strictEqual(result.tokens[5].text, 'DAN');
+
+  assert.strictEqual(result.tokens[6].type, TokenType.DIALOGUE);
+  assert.strictEqual(result.tokens[6].text, 'Then let\'s retire them.\n_Permanently_.');
+
+  assert.strictEqual(result.tokens[7].type, TokenType.DIALOGUE_END);
+
+  assert.strictEqual(result.tokens[8].type, TokenType.DIALOGUE_BEGIN);
+  assert.strictEqual(result.tokens[8].dual, undefined);
+
+  assert.strictEqual(result.tokens[9].type, TokenType.CHARACTER);
+  assert.strictEqual(result.tokens[9].text, 'STEEL');
+
+  assert.strictEqual(result.tokens[10].type, TokenType.PARENTHETICAL);
+  assert.strictEqual(result.tokens[10].text, '(starting the engine)');
+
+  assert.strictEqual(result.tokens[11].type, TokenType.DIALOGUE);
+  assert.strictEqual(result.tokens[11].text, 'So much for retirement!\nSo much for retirement!');
+
+  assert.strictEqual(result.tokens[12].type, TokenType.PARENTHETICAL);
+  assert.strictEqual(result.tokens[12].text, '(continue)');
+
+  assert.strictEqual(result.tokens[13].type, TokenType.DIALOGUE);
+  assert.strictEqual(result.tokens[13].text, 'Damn it.');
+
+  assert.strictEqual(result.tokens[14].type, TokenType.DIALOGUE_END);
+
+  assert.strictEqual(result.tokens[15].type, TokenType.DUAL_DIALOGUE_BEGIN);
+
+  assert.strictEqual(result.tokens[16].type, TokenType.DIALOGUE_BEGIN);
+  assert.strictEqual(result.tokens[16].dual, 'left');
+
+  assert.strictEqual(result.tokens[17].type, TokenType.CHARACTER);
+  assert.strictEqual(result.tokens[17].text, 'BRICK');
+
+  assert.strictEqual(result.tokens[18].type, TokenType.DIALOGUE);
+  assert.strictEqual(result.tokens[18].text, 'Screw retirement.');
+
+  assert.strictEqual(result.tokens[19].type, TokenType.DIALOGUE_END);
+
+  assert.strictEqual(result.tokens[20].type, TokenType.DIALOGUE_BEGIN);
+  assert.strictEqual(result.tokens[20].dual, 'right');
+
+  assert.strictEqual(result.tokens[21].type, TokenType.CHARACTER);
+  assert.strictEqual(result.tokens[21].text, 'STEEL');
+
+  assert.strictEqual(result.tokens[22].type, TokenType.DIALOGUE);
+  assert.strictEqual(result.tokens[22].text, 'Screw retirement.');
+
+  assert.strictEqual(result.tokens[23].type, TokenType.DIALOGUE_END);
+
+  assert.strictEqual(result.tokens[24].type, TokenType.DUAL_DIALOGUE_END);
+
+  assert.strictEqual(result.tokens[25].type, TokenType.DIALOGUE_BEGIN);
+  assert.strictEqual(result.tokens[25].dual, undefined);
+
+  assert.strictEqual(result.tokens[26].type, TokenType.CHARACTER);
+  assert.strictEqual(result.tokens[26].text, 'non-capitalized character');
+
+  assert.strictEqual(result.tokens[27].type, TokenType.DIALOGUE);
+  assert.strictEqual(result.tokens[27].text, 'Screw retirement.');
+
+  assert.strictEqual(result.tokens[28].type, TokenType.DIALOGUE_END);
 });

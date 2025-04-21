@@ -13,6 +13,13 @@ const TokenType = {
 
   // Top-level types (sorted alphabetically).
   CENTERED: 'centered',
+  CHARACTER: 'character',
+  DIALOGUE_BEGIN: 'dialogue_begin',
+  DIALOGUE_END: 'dialogue_end',
+  DIALOGUE: 'dialogue',
+  DUAL_DIALOGUE_BEGIN: 'dual_dialogue_begin',
+  DUAL_DIALOGUE_END: 'dual_dialogue_end',
+  PARENTHETICAL: 'parenthetical',
   SCENE_HEADING: 'scene_heading',
   TRANSITION: 'transition',
 };
@@ -21,10 +28,13 @@ const RE = {
   // Sorted alphabetically.
   BONEYARD: /\/\*.*?\*\//gms,
   CENTERED: /^(?:> *)(.+)(?: *<)(\n.+)*/g,
+  DIALOGUE: /^(@.+|[A-Z*_]+[0-9A-Z (._\-')]*)(\^?)?(?:\n(?!\n+))([\s\S]+)/,
   EXTRA_LINE_BREAKS: /^\n+|\n+$/,
   EXTRA_WHITESPACES: /^\t+|^ {3,}/gm,
   LINE_BREAKS: /\r\n|\r/g,
   PAGE_BREAK: /^={3,}$/,
+  PARENTHETICAL: /^(\(.+\))$/,
+  PARENTHETICAL_SPLITTER: /(\(.+\))(?:\n+)/,
   SCENE_HEADING: /^((?:\*{0,3}_?)?(?:(?:int|ext|est|i\/e)[. ]).+)|^(?:\.(?!\.+))(.+)/i,
   SCENE_NUMBER: /( *#(.+)# *)/,
   SPLITTER: /\n{2,}/g,
@@ -49,12 +59,17 @@ function parse(fountainText) {
   const blocks = text.split(RE.SPLITTER);
   const tokenList = [];
 
-  for (const block of blocks) {
+  let dual = false;
+
+  // Scans the blocks in reverse order to handle dual dialogues correctly.
+  for (let i = blocks.length - 1; i >= 0; i--) {
+    const block = blocks[i];
     let matches = null;
 
     // Title page.
     if (RE.TITLE_PAGE.test(block)) {
       matches = block.replace(RE.TITLE_PAGE, '\n$1').split(RE.SPLITTER);
+      matches.reverse();
       for (const match of matches) {
         const parts = match.replace(RE.EXTRA_LINE_BREAKS, '').split(/:\n*/);
         tokenList.push({
@@ -105,7 +120,56 @@ function parse(fountainText) {
       continue;
     }
 
+    // Dialogue blocks - characters, parenthetical texts and dialogue.
+    matches = block.match(RE.DIALOGUE)
+    if (matches) {
+      if (matches[1].indexOf('  ') === matches[1].length - 2) {
+        // Capitalized string ends with two spaces will be considered as an
+        // action.
+        continue;
+      }
+
+      if (matches[2]) {
+        tokenList.push({ type: TokenType.DUAL_DIALOGUE_END });
+      }
+
+      tokenList.push({ type: TokenType.DIALOGUE_END });
+
+      const parts = matches[3].split(RE.PARENTHETICAL_SPLITTER).reverse();
+
+      for (const text of parts) {
+        if (text.length > 0) {
+          tokenList.push({
+            type: RE.PARENTHETICAL.test(text) ?
+                TokenType.PARENTHETICAL : TokenType.DIALOGUE,
+            text: text.trim() });
+        }
+      }
+
+      if (matches[1].indexOf('@') === 0) {
+        matches[1] = matches[1].replace('@', '');
+      }
+      tokenList.push({
+        type: TokenType.CHARACTER,
+        text: matches[1].trim()
+      });
+
+      tokenList.push({
+        type: TokenType.DIALOGUE_BEGIN,
+        dual: matches[2] ? 'right' : dual ? 'left' : undefined
+      });
+
+      if (dual) {
+        tokenList.push({ type: TokenType.DUAL_DIALOGUE_BEGIN });
+      }
+
+      dual = matches[2] ? true : false;
+      continue;
+    }
   }
+
+  // Reverses the token list to restore the original order.
+  tokenList.reverse();
 
   return {
     tokens: tokenList,
