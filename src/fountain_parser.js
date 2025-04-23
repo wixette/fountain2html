@@ -45,7 +45,6 @@ const RE = {
   EXTRA_WHITESPACES: /^\t+|^ {3,}/gm,
   LINE_BREAKS: /\r\n|\r/g,
   NOTE: /^(?:\[{2}(?!\[+))(.+)?(?:\]{2})(?!\[+)$/s,
-  NOTE_INLINE: /(?:\[{2}(?!\[+))([\s\S]+?)(?:\]{2}(?!\[+))/g,
   PAGE_BREAK: /^={3,}$/,
   PARENTHETICAL: /^(\(.+\))$/,
   PARENTHETICAL_SPLITTER: /(\(.+\))(?:\n+)/,
@@ -206,8 +205,6 @@ function parse(fountainText) {
       continue;
     }
 
-    console.log(block);
-
     // Notes.
     matches = block.trim().match(RE.NOTE)
     if (matches) {
@@ -239,7 +236,7 @@ function parse(fountainText) {
     let text = block.trim();
     if (text.indexOf('!') === 0) {
       // '!' can be used to force an action.
-      text = text.substring(1, text.length - 1);
+      text = text.substring(1, text.length);
     }
     if (text) {
       tokenList.push({
@@ -252,9 +249,7 @@ function parse(fountainText) {
   // Reverses the token list to restore the original order.
   tokenList.reverse();
 
-  // TODO: Implement inline-post-processing here.
-
-  // TODO: Add metadata.
+  // TODO: Add metadata support.
 
   return {
     tokens: tokenList,
