@@ -3,7 +3,7 @@ const INLINE_RE = {
   BOLD_ITALIC: /(\*{3}(?=.+\*{3}))(.+?)(\*{3})/g,
   BOLD_UNDERLINE: /(_{1}\*{2}(?=.+\*{2}_{1})|\*{2}_{1}(?=.+_{1}\*{2}))(.+?)(\*{2}_{1}|_{1}\*{2})/g,
   BOLD: /(\*{2}(?=.+\*{2}))(.+?)(\*{2})/g,
-  ITALIC_UNDERLINE: /(?:_{1}\*{1}(?=.+\*{1}_{1})|\*{1}_{1}(?=.+_{1}\*{1}))(.+?)(\*{1}_{1}|_{1}\*{1})/g,
+  ITALIC_UNDERLINE: /(_{1}\*{1}(?=.+\*{1}_{1})|\*{1}_{1}(?=.+_{1}\*{1}))(.+?)(\*{1}_{1}|_{1}\*{1})/g,
   ITALIC: /(\*{1}(?=.+\*{1}))(.+?)(\*{1})/g,
   NOTE_INLINE: /(?:\[{2}(?!\[+))([\s\S]+?)(?:\]{2}(?!\[+))/g,
   UNDERLINE: /(_{1}(?=.+_{1}))(.+?)(_{1})/g,
@@ -31,20 +31,16 @@ function inlineTagsToHtml(s) {
   if (!s) {
     return '';
   }
-
+  s = s.replace(INLINE_RE.NOTE_INLINE, INLINE_HTML.NOTE_INLINE)
+      .replace(/\\\*/g, '[star]')
+      .replace(/\\_/g, '[underline]')
+      .replace(/\n/g, INLINE_HTML.LINE_BREAK);
   const styles = Object.getOwnPropertyNames(INLINE_RE);
   for (const style of styles) {
     const regex = INLINE_RE[style];
     const htmlSnippet = INLINE_HTML[style];
     if (regex.test(s)) {
-      if (style === 'NOTE_INLINE') {
-        s = s.replace(regex, htmlSnippet)
-          .replace(/\\\*/g, '[star]')
-          .replace(/\\_/g, '[underline]')
-          .replace(/\n/g, INLINE_HTML.LINE_BREAK);
-      } else {
-        s = s.replace(regex, htmlSnippet);
-      }
+      s = s.replace(regex, htmlSnippet);
     }
   }
   return s.replace(/\[star\]/g, '*').replace(/\[underline\]/g, '_').trim();
