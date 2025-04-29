@@ -192,6 +192,5 @@ test('renderer basic cases', () => {
 test('renderer dialogue', () => {
   let fountainObject = parse(TEXT_1);
   let html = render(fountainObject, 'default');
-  console.log(html);
   assert(html.includes(HTML_1));
 });
