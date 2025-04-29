@@ -1,13 +1,15 @@
 :root{
   --font-size-screen: 18px;
+  --bk-color-default: #fff;
   --color-default: #333;
   --color-action: #333;
   --color-dialogue: #333;
   --color-parenthetical: #696;
+  --dialogue-block-width: 74%;
 }
 
 body {
-  background-color: #f8f8f8;
+  background-color: var(--bk-color-default);
   border: 0;
   color: var(--color-default);
   font-family: "Noto Sans Mono", Menlo, Monaco, Consolas, "SFMono-Regular",
@@ -137,7 +139,7 @@ br {}
 
 .dialogue-block {
   margin: 0 auto;
-  width: 74%;
+  width: var(--dialogue-block-width);
   text-align: left;
 }
 
@@ -154,11 +156,34 @@ br {}
   margin-left: 3em;
 }
 
-.dual-dialogue-block {}
+.dual-dialogue-block {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: var(--dialogue-block-width);
+}
 
-.dual-left {}
+.dialogue-block.dual-left {
+  width: 48%;
+  margin-right: 10px;
+}
 
-.dual-right {}
+.dialogue-block.dual-right {
+  width: 48%;
+  margin-left: 10px;
+}
+
+/* Override character position in dual dialogue */
+.dialogue-block.dual-left .character,
+.dialogue-block.dual-right .character {
+  margin-left: 2em;
+}
+
+/* Override parenthetical positioning in dual dialogue */
+.dialogue-block.dual-left .parenthetical,
+.dialogue-block.dual-right .parenthetical {
+  margin-left: 1em;
+}
 
 .action {
   color: var(--color-action);
