@@ -1,0 +1,186 @@
+:root{
+  --font-size-screen: 18px;
+  --color-default: #333;
+  --color-action: #333;
+  --color-dialogue: #333;
+  --color-parenthetical: #696;
+}
+
+body {
+  background-color: #f8f8f8;
+  border: 0;
+  color: var(--color-default);
+  font-family: "Noto Sans Mono", Menlo, Monaco, Consolas, "SFMono-Regular",
+    "Courier Prime", "Courier New", "Liberation Mono",
+    "DejaVu Sans Mono", monospace,
+    "Noto Sans SC", "Noto Sans TC", "Noto Sans JP",
+    "Source Han Sans SC", "Source Han Sans TC", "Source Han Sans JP",
+    "WenQuanYi Micro Hei", "Heiti SC", "Heiti TC",
+    "Microsoft Yahei", "Microsoft JhengHei",
+    "Hiragino Kaku Gothic Pro", "Hiragino Sans GB", "Meiryo";
+  font-size: var(--font-size-screen);
+  line-height: 1.5em;
+  margin: 1in 1in 1in 1.25in; /* Standard screenplay margins */
+  padding: 0;
+}
+
+main {
+  margin: 0 auto;
+  max-width: 800px;
+  width: 100%;
+}
+
+h1 {
+  font-size: var(--font-size-screen);
+  line-height: 1.5em;
+  margin: 2em 0;
+  padding: 0;
+}
+
+h2 {
+  font-size: var(--font-size-screen);
+  line-height: 1.5em;
+  margin: 1em 0;
+  padding: 0;
+}
+
+h3 {
+  font-size: var(--font-size-screen);
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  font-size: var(--font-size-screen);
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+}
+
+div {
+  font-size: var(--font-size-screen);
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+}
+
+span {}
+
+hr {}
+
+br {}
+
+.title-page {
+  padding: 10em 0;
+}
+
+.title-page-title {
+  margin: 0 auto;
+  text-align: center;
+  width: 80%;
+}
+
+.title-page-credit {
+  margin: 2em auto 0 auto;
+  text-align: center;
+  width: 80%;
+}
+
+.title-page-authors {
+  margin: 0 auto;
+  text-align: center;
+  width: 80%;
+}
+
+.title-page-source {
+  margin: 2em auto;
+  text-align: center;
+  width: 80%;
+}
+
+.title-page-notes {
+  margin: 2em 0 0 auto;
+  text-align: right;
+  width: 80%;
+}
+
+.title-page-draft-date {
+  margin: 0 0 0 auto;
+  text-align: right;
+  width: 80%;
+}
+
+.title-page-date {
+  margin: 0 0 0 auto;
+  text-align: right;
+  width: 80%;
+}
+
+.title-page-contact {
+  margin: 0 0 0 auto;
+  text-align: right;
+  width: 80%;
+}
+
+.title-page-copyright {
+  margin: 2em auto 0 0;
+  text-align: left;
+  width: 80%;
+}
+
+.screen-heading {}
+
+.transition {
+  text-align: right;
+}
+
+.dialogue-block {
+  margin: 0 auto;
+  width: 74%;
+  text-align: left;
+}
+
+.character {
+  margin: 1em 0 0 6em;
+}
+
+.dialogue {
+  color: var(--color-dialogue);
+}
+
+.parenthetical {
+  color: var(--color-parenthetical);
+  margin-left: 3em;
+}
+
+.dual-dialogue-block {}
+
+.dual-left {}
+
+.dual-right {}
+
+.action {
+  color: var(--color-action);
+  margin: 1em 0;
+}
+
+.centered {}
+
+.section {}
+
+.section-depth {}
+
+.synopsis {}
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.underline {
+  text-decoration: underline;
+}
