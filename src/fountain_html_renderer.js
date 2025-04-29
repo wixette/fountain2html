@@ -81,6 +81,7 @@ function render(fountainObject, theme) {
   const bodyBuf = [];
 
   for (const token of fountainObject.tokens) {
+    token.text = inlineTagsToHtml(token.text);
     switch (token.type) {
       // Title pages.
       case TokenType.TITLE:
