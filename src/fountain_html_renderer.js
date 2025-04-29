@@ -44,7 +44,9 @@ const HTML_TEMPLATE = (title, body, theme) => `
 <link rel="stylesheet" href="themes/${theme}/styles.css">
 <script src=""></script>
 <body>
+<main>
 ${body}
+</main>
 </body>
 </html>
 `
@@ -124,10 +126,10 @@ function render(fountainObject, theme) {
         bodyBuf.push(`<h2 class="transition">${token.text}</h2>`);
         break;
       case TokenType.DUAL_DIALOGUE_BEGIN:
-        bodyBuf.push('<div class="dual-dialogue">');
+        bodyBuf.push('<div class="dual-dialogue-block">');
         break;
       case TokenType.DIALOGUE_BEGIN:
-        bodyBuf.push(`<div class="dialogue${token.dual === DualPosition.UNKNOWN ? '' : ` dual-${token.dual}`}">`);
+        bodyBuf.push(`<div class="dialogue-block${token.dual === DualPosition.UNKNOWN ? '' : ` dual-${token.dual}`}">`);
         break;
       case TokenType.CHARACTER:
         bodyBuf.push(`<h3 class="character">${token.text}</h3>`);
