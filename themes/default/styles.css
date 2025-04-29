@@ -1,11 +1,13 @@
 :root{
-  --font-size-screen: 18px;
+  --font-size-screen: 16px;
+  --font-size-print: 12pt;
   --bk-color-default: #fff;
   --color-default: #333;
   --color-action: #333;
   --color-dialogue: #333;
   --color-parenthetical: #696;
   --dialogue-block-width: 74%;
+  --standard-screenplay-margins: 1in 1in 1in 1.25in;
 }
 
 body {
@@ -22,7 +24,7 @@ body {
     "Hiragino Kaku Gothic Pro", "Hiragino Sans GB", "Meiryo";
   font-size: var(--font-size-screen);
   line-height: 1.5em;
-  margin: 1in 1in 1in 1.25in; /* Standard screenplay margins */
+  margin: var(--standard-screenplay-margins);
   padding: 0;
 }
 
@@ -32,46 +34,45 @@ main {
   width: 100%;
 }
 
-h1 {
+h1, h2, h3, p {
   font-size: var(--font-size-screen);
+}
+
+h1 {
   line-height: 1.5em;
   margin: 2em 0;
   padding: 0;
 }
 
 h2 {
-  font-size: var(--font-size-screen);
   line-height: 1.5em;
   margin: 1em 0;
   padding: 0;
 }
 
 h3 {
-  font-size: var(--font-size-screen);
   line-height: 1.5em;
   margin: 0;
   padding: 0;
 }
 
 p {
-  font-size: var(--font-size-screen);
   line-height: 1.5em;
   margin: 0;
   padding: 0;
 }
 
 div {
-  font-size: var(--font-size-screen);
   line-height: 1.5em;
   margin: 0;
   padding: 0;
 }
 
-span {}
-
-hr {}
-
-br {}
+hr {
+  border: 0;
+  margin-top: 10em;
+  margin-bottom: 10em;
+}
 
 .title-page {
   padding: 10em 0;
@@ -190,7 +191,9 @@ br {}
   margin: 1em 0;
 }
 
-.centered {}
+.centered {
+  text-align: center;
+}
 
 .section {}
 
@@ -208,4 +211,34 @@ br {}
 
 .underline {
   text-decoration: underline;
+}
+
+@media print{
+  body {
+    font-size: var(--font-size-print);
+    margin: 0;
+    padding: 0;
+  }
+  h1, h2, h3, p {
+    font-size: var(--font-size-print);
+  }
+  .title-page {
+    break-after: page;
+    margin-bottom: 0;
+  }
+  hr {
+    break-after: page;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+}
+
+@page {
+  size: a4 portrait;
+  margin: var(--standard-screenplay-margins);
+  @bottom-right {
+    content: counter(page);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+  }
 }
