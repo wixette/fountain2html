@@ -35,8 +35,7 @@ const INLINE_HTML = {
   UNDERLINE: '<span class="underline">$2</span>',
 };
 
-const HTML_TEMPLATE = (title, body, theme) => `
-<!DOCTYPE html>
+const HTML_TEMPLATE = (title, body, theme) => `<!DOCTYPE html>
 <html>
 <meta charset="UTF-8">
 <title>${title}</title>
