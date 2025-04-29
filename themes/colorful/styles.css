@@ -1,0 +1,273 @@
+/* Theme: ocean */
+
+:root{
+  --bk-color-default: #fff;
+  --color-action: #69c;
+  --color-authors: #66f;
+  --color-centered: #66f;
+  --color-character: #f96;
+  --color-contact: #66f;
+  --color-copyright: #66f;
+  --color-credit: #66f;
+  --color-date: #66f;
+  --color-default: #66f;
+  --color-dialogue: #369;
+  --color-draft-date: #339;
+  --color-notes: #66f;
+  --color-parenthetical: #6c9;
+  --color-screen-heading: #ea6;
+  --color-source: #66f;
+  --color-title: #f60;
+  --color-transition: #ea6;
+  --dialogue-block-width: 74%;
+  --font-size-print: 12pt;
+  --font-size-screen: 16px;
+  --standard-screenplay-margins: 1in 1in 1in 1.25in;
+}
+
+body {
+  background-color: var(--bk-color-default);
+  border: 0;
+  color: var(--color-default);
+  font-family: "Noto Sans Mono", Menlo, Monaco, Consolas, "SFMono-Regular",
+    "Courier Prime", "Courier New", "Liberation Mono",
+    "DejaVu Sans Mono", monospace,
+    "Noto Sans SC", "Noto Sans TC", "Noto Sans JP",
+    "Source Han Sans SC", "Source Han Sans TC", "Source Han Sans JP",
+    "WenQuanYi Micro Hei", "Heiti SC", "Heiti TC",
+    "Microsoft Yahei", "Microsoft JhengHei",
+    "Hiragino Kaku Gothic Pro", "Hiragino Sans GB", "Meiryo";
+  font-size: var(--font-size-screen);
+  line-height: 1.5em;
+  margin: var(--standard-screenplay-margins);
+  padding: 0;
+}
+
+main {
+  margin: 0 auto;
+  max-width: 800px;
+  width: 100%;
+}
+
+h1, h2, h3, p {
+  font-size: var(--font-size-screen);
+}
+
+h1 {
+  line-height: 1.5em;
+  margin: 2em 0;
+  padding: 0;
+}
+
+h2 {
+  line-height: 1.5em;
+  margin: 1em 0;
+  padding: 0;
+}
+
+h3 {
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+}
+
+div {
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+}
+
+hr {
+  border: 0;
+  margin-top: 10em;
+  margin-bottom: 10em;
+}
+
+.title-page {
+  padding: 10em 0;
+}
+
+.title-page-title {
+  color: var(--color-title);
+  margin: 0 auto;
+  text-align: center;
+  width: 80%;
+}
+
+.title-page-credit {
+  color: var(--color-credit);
+  margin: 2em auto 0 auto;
+  text-align: center;
+  width: 80%;
+}
+
+.title-page-authors {
+  color: var(--color-authors);
+  margin: 0 auto;
+  text-align: center;
+  width: 80%;
+}
+
+.title-page-source {
+  color: var(--color-source);
+  margin: 2em auto;
+  text-align: center;
+  width: 80%;
+}
+
+.title-page-notes {
+  color: var(--color-notes);
+  margin: 2em 0 0 auto;
+  text-align: right;
+  width: 80%;
+}
+
+.title-page-draft-date {
+  color: var(--color-draft-date);
+  margin: 0 0 0 auto;
+  text-align: right;
+  width: 80%;
+}
+
+.title-page-date {
+  color: var(--color-date);
+  margin: 0 0 0 auto;
+  text-align: right;
+  width: 80%;
+}
+
+.title-page-contact {
+  color: var(--color-contact);
+  margin: 0 0 0 auto;
+  text-align: right;
+  width: 80%;
+}
+
+.title-page-copyright {
+  color: var(--color-copyright);
+  margin: 2em auto 0 0;
+  text-align: left;
+  width: 80%;
+}
+
+.screen-heading {
+  color: var(--color-screen-heading);
+}
+
+.transition {
+  color: var(--color-transition);
+  text-align: right;
+}
+
+.dialogue-block {
+  margin: 0 auto;
+  width: var(--dialogue-block-width);
+  text-align: left;
+}
+
+.character {
+  color: var(--color-character);
+  margin: 1em 0 0 6em;
+}
+
+.dialogue {
+  color: var(--color-dialogue);
+}
+
+.parenthetical {
+  color: var(--color-parenthetical);
+  margin-left: 3em;
+}
+
+.dual-dialogue-block {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: var(--dialogue-block-width);
+}
+
+.dialogue-block.dual-left {
+  width: 48%;
+  margin-right: 10px;
+}
+
+.dialogue-block.dual-right {
+  width: 48%;
+  margin-left: 10px;
+}
+
+/* Override character position in dual dialogue */
+.dialogue-block.dual-left .character,
+.dialogue-block.dual-right .character {
+  margin-left: 2em;
+}
+
+/* Override parenthetical positioning in dual dialogue */
+.dialogue-block.dual-left .parenthetical,
+.dialogue-block.dual-right .parenthetical {
+  margin-left: 1em;
+}
+
+.action {
+  color: var(--color-action);
+  margin: 1em 0;
+}
+
+.centered {
+  color: var(--color-centered);
+  text-align: center;
+}
+
+.section {}
+
+.section-depth {}
+
+.synopsis {}
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+@media print{
+  body {
+    font-size: var(--font-size-print);
+    margin: 0;
+    padding: 0;
+  }
+  h1, h2, h3, p {
+    font-size: var(--font-size-print);
+  }
+  .title-page {
+    break-after: page;
+    margin-bottom: 0;
+  }
+  hr {
+    break-after: page;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+}
+
+@page {
+  size: a4 portrait;
+  margin: var(--standard-screenplay-margins);
+  @bottom-right {
+    content: counter(page);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+  }
+}
