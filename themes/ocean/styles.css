@@ -20,6 +20,7 @@
   --color-title: #39f;
   --color-transition: #66c;
   --dialogue-block-width: 74%;
+  --default-line-height: 1.5em;
   --font-size-print: 12pt;
   --font-size-screen: 16px;
   --standard-screenplay-margins: 1in 1in 1in 1.25in;
@@ -32,13 +33,13 @@ body {
   font-family: "Noto Sans Mono", Menlo, Monaco, Consolas, "SFMono-Regular",
     "Courier Prime", "Courier New", "Liberation Mono",
     "DejaVu Sans Mono", monospace,
-    "Noto Sans SC", "Noto Sans TC", "Noto Sans JP",
+    "Noto Sans SC", "Noto Sans TC", "Noto Sans JP", "Noto Sans CJK",
     "Source Han Sans SC", "Source Han Sans TC", "Source Han Sans JP",
     "WenQuanYi Micro Hei", "Heiti SC", "Heiti TC",
     "Microsoft Yahei", "Microsoft JhengHei",
     "Hiragino Kaku Gothic Pro", "Hiragino Sans GB", "Meiryo";
   font-size: var(--font-size-screen);
-  line-height: 1.5em;
+  line-height: var(--default-line-height);
   margin: var(--standard-screenplay-margins);
   padding: 0;
 }
@@ -54,31 +55,31 @@ h1, h2, h3, p {
 }
 
 h1 {
-  line-height: 1.5em;
+  line-height: var(--default-line-height);
   margin: 2em 0;
   padding: 0;
 }
 
 h2 {
-  line-height: 1.5em;
+  line-height: var(--default-line-height);
   margin: 1em 0;
   padding: 0;
 }
 
 h3 {
-  line-height: 1.5em;
+  line-height: var(--default-line-height);
   margin: 0;
   padding: 0;
 }
 
 p {
-  line-height: 1.5em;
+  line-height: var(--default-line-height);
   margin: 0;
   padding: 0;
 }
 
 div {
-  line-height: 1.5em;
+  line-height: var(--default-line-height);
   margin: 0;
   padding: 0;
 }

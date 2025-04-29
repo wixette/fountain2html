@@ -7,7 +7,9 @@ import { TokenType, DualPosition } from './fountain_parser.js';
 const THEMES = [
   'default',
 
+  'cjk',
   'colorful',
+  'dark',
   'ocean',
 ];
 

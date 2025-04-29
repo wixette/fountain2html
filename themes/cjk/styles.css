@@ -1,4 +1,4 @@
-/* Theme: default */
+/* Theme: cjk - larger line light, variable font sizes */
 
 :root{
   --bk-color-default: #fff;
@@ -19,10 +19,10 @@
   --color-source: #333;
   --color-title: #333;
   --color-transition: #333;
-  --default-line-height: 1.5em;
+  --default-line-height: 1.8em;
   --dialogue-block-width: 74%;
   --font-size-print: 12pt;
-  --font-size-screen: 16px;
+  --font-size-screen: 18px;
   --standard-screenplay-margins: 1in 1in 1in 1.25in;
 }
 
@@ -55,18 +55,21 @@ h1, h2, h3, p {
 }
 
 h1 {
+  font-size: 200%;
   line-height: var(--default-line-height);
   margin: 2em 0;
   padding: 0;
 }
 
 h2 {
+  font-size: 130%;
   line-height: var(--default-line-height);
   margin: 1em 0;
   padding: 0;
 }
 
 h3 {
+  font-size: 100%;
   line-height: var(--default-line-height);
   margin: 0;
   padding: 0;
@@ -225,7 +228,9 @@ hr {
   text-align: center;
 }
 
-.section {}
+.section {
+  font-size: 130%;
+}
 
 .section-depth {}
 
@@ -251,6 +256,18 @@ hr {
   }
   h1, h2, h3, p {
     font-size: var(--font-size-print);
+  }
+  h1 {
+    font-size: 200%;
+  }
+  h2 {
+    font-size: 130%;
+  }
+  h3 {
+    font-size: 100%;
+  }
+  .section {
+    font-size: 130%;
   }
   .title-page {
     break-after: page;
