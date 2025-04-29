@@ -14,3 +14,17 @@ additional features:
 - Commandline interface to convert a .fountain file to HTML
 - `@media print` support, enabling page-break when printing
 - Predefined print-friendly themes, including colorful and high-contrast themes
+
+## Use command-line utility
+
+Make sure you have Node.js and all yarn dependencies installed:
+
+```bash
+yarn install
+```
+
+Then use the following command to convert a Fountain file to HTML:
+
+```bash
+node . --theme=default example.fountain > example.html
+```
