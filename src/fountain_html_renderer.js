@@ -1,3 +1,11 @@
+import { TokenType, DualPosition } from './fountain_parser.js';
+
+const THEMES = [
+  'default',
+];
+
+const DEFAULT_THEME = 'default';
+
 const INLINE_RE = {
   BOLD_ITALIC_UNDERLINE: /(_{1}\*{3}(?=.+\*{3}_{1})|\*{3}_{1}(?=.+_{1}\*{3}))(.+?)(\*{3}_{1}|_{1}\*{3})/g,
   BOLD_ITALIC: /(\*{3}(?=.+\*{3}))(.+?)(\*{3})/g,
@@ -27,6 +35,20 @@ const INLINE_HTML = {
   UNDERLINE: '<span class="underline">$2</span>',
 };
 
+const HTML_TEMPLATE = (title, body, theme) => `
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<title>${title}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="themes/${theme}/styles.css">
+<script src=""></script>
+<body>
+${body}
+</body>
+</html>
+`
+
 function inlineTagsToHtml(s) {
   if (!s) {
     return '';
@@ -46,8 +68,110 @@ function inlineTagsToHtml(s) {
   return s.replace(/\[star\]/g, '*').replace(/\[underline\]/g, '_').trim();
 }
 
-function render(/* fountainObject, theme */) {
-  return ''
+function render(fountainObject, theme) {
+  if (!fountainObject || !fountainObject.tokens) {
+    return '';
+  }
+  if (!theme || !THEMES.includes(theme)) {
+    theme = DEFAULT_THEME;
+  }
+
+  let title = '';
+  const titlePageBuf = [];
+  const bodyBuf = [];
+
+  for (const token of fountainObject.tokens) {
+    switch (token.type) {
+      // Title pages.
+      case TokenType.TITLE:
+        titlePageBuf.push(`<h1 class="title-page-title">${token.text}</h1>`);
+        title = token.text.replace('<br />', ' ').replace(/<(?:.|\n)*?>/g, '');
+        break;
+      case TokenType.CREDIT:
+        titlePageBuf.push(`<p class="title-page-credit">${token.text}</p>`);
+        break;
+      case TokenType.AUTHOR:
+        titlePageBuf.push(`<p class="title-page-authors">${token.text}</p>`);
+        break;
+      case TokenType.AUTHORS:
+        titlePageBuf.push(`<p class="title-page-authors">${token.text}</p>`);
+        break;
+      case TokenType.SOURCE:
+        titlePageBuf.push(`<p class="title-page-source">${token.text}</p>`);
+        break;
+      case TokenType.NOTES:
+        titlePageBuf.push(`<p class="title-page-notes">${token.text}</p>`);
+        break;
+      case TokenType.DRAFT_DATE:
+        titlePageBuf.push(`<p class="title-page-draft-date">${token.text}</p>`);
+        break;
+      case TokenType.DATE:
+        titlePageBuf.push(`<p class="title-page-date">${token.text}</p>`);
+        break;
+      case TokenType.CONTACT:
+        titlePageBuf.push(`<p class="title-page-contact">${token.text}</p>`);
+        break;
+      case TokenType.COPYRIGHT:
+        titlePageBuf.push(`<p class="title-page-copyright">${token.text}</p>`);
+        break;
+
+      // Dialogues.
+      case TokenType.SCENE_HEADING:
+        bodyBuf.push(`<h2 class="screen-heading"${token.sceneNumber ? ` id="${token.sceneNumber}"` : ''}>${token.text}</h2>`);
+        break;
+      case TokenType.TRANSITION:
+        bodyBuf.push(`<h2 class="transition">${token.text}</h2>`);
+        break;
+      case TokenType.DUAL_DIALOGUE_BEGIN:
+        bodyBuf.push('<div class="dual-dialogue">');
+        break;
+      case TokenType.DIALOGUE_BEGIN:
+        bodyBuf.push(`<div class="dialogue${token.dual === DualPosition.UNKNOWN ? '' : ` dual-${token.dual}`}">`);
+        break;
+      case TokenType.CHARACTER:
+        bodyBuf.push(`<h3 class="character">${token.text}</h3>`);
+        break;
+      case TokenType.PARENTHETICAL:
+        bodyBuf.push(`<p class="parenthetical">${token.text}</p>`);
+        break;
+      case TokenType.DIALOGUE:
+        bodyBuf.push(`<p class="dialogue">${token.text}</p>`);
+        break;
+      case TokenType.DIALOGUE_END:
+        bodyBuf.push('</div>');
+        break;
+      case TokenType.DUAL_DIALOGUE_END:
+        bodyBuf.push('</div>');
+        break;
+
+      // Others.
+      case TokenType.SECTION:
+        bodyBuf.push(`<p class="section section-${token.depth}" depth="${token.depth}">${token.text}</p>`);
+        break;
+      case TokenType.SYNOPSIS:
+        bodyBuf.push(`<p class="synopsis">${token.text}</p>`);
+        break;
+      case TokenType.NOTE:
+        bodyBuf.push(`<!-- ${token.text} -->`);
+        break;
+      case TokenType.ACTION:
+        bodyBuf.push(`<p class="action">${token.text}</p>`);
+        break;
+      case TokenType.CENTERED:
+        bodyBuf.push(`<p class="centered">${token.text}</p>`);
+        break;
+      case TokenType.PAGE_BREAK:
+        bodyBuf.push('<hr />');
+        break;
+      case TokenType.LINE_BREAK:
+        bodyBuf.push('<br />');
+        break;
+    }
+  }
+
+  const titlePage = `<div class="title-page">\n${titlePageBuf.join('\n')}\n</div>`;
+  const body = `${titlePage}\n${bodyBuf.join('\n')}`;
+  return HTML_TEMPLATE(title, body, theme);
 }
 
 export {
