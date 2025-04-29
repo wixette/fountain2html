@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Renders a parsed Fountain token list into HTML.
+ */
+
 import { TokenType, DualPosition } from './fountain_parser.js';
 
 const THEMES = [

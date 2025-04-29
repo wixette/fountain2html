@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Node.js command-line tool to convert Fountain files to HTML.
+ */
+
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { parse } from './src/fountain_parser.js';
@@ -17,16 +21,16 @@ const argv = yargs(hideBin(process.argv))
 const fountainFile = argv._[0];
 const theme = argv.theme || 'default';
 
-// Read the fountain file.
+// Reads the fountain file.
 import fs from 'fs';
 import path from 'path';
 const filePath = path.resolve(process.cwd(), fountainFile);
 const fileContent = fs.readFileSync(filePath, 'utf8');
 
-// Parse the fountain file.
+// Parses the fountain file.
 const fountainObject = parse(fileContent);
 
-// Render the fountain object to HTML.
+// Renders the fountain object to HTML.
 const html = render(fountainObject, theme);
 
 console.log(html);

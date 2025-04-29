@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Parses a Fountain file into a token list.
+ */
+
 const TokenType = {
   // Scene heading types (sorted alphabetically).
   AUTHOR: 'author',
