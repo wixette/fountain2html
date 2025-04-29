@@ -1,12 +1,25 @@
 :root{
-  --font-size-screen: 16px;
-  --font-size-print: 12pt;
   --bk-color-default: #fff;
-  --color-default: #333;
   --color-action: #333;
+  --color-authors: #333;
+  --color-centered: #333;
+  --color-character: #333;
+  --color-contact: #333;
+  --color-copyright: #333;
+  --color-credit: #333;
+  --color-date: #333;
+  --color-default: #333;
   --color-dialogue: #333;
+  --color-draft-date: #333;
+  --color-notes: #666;
   --color-parenthetical: #666;
+  --color-screen-heading: #333;
+  --color-source: #333;
+  --color-title: #333;
+  --color-transition: #333;
   --dialogue-block-width: 74%;
+  --font-size-print: 12pt;
+  --font-size-screen: 16px;
   --standard-screenplay-margins: 1in 1in 1in 1.25in;
 }
 
@@ -79,62 +92,74 @@ hr {
 }
 
 .title-page-title {
+  color: var(--color-title);
   margin: 0 auto;
   text-align: center;
   width: 80%;
 }
 
 .title-page-credit {
+  color: var(--color-credit);
   margin: 2em auto 0 auto;
   text-align: center;
   width: 80%;
 }
 
 .title-page-authors {
+  color: var(--color-authors);
   margin: 0 auto;
   text-align: center;
   width: 80%;
 }
 
 .title-page-source {
+  color: var(--color-source);
   margin: 2em auto;
   text-align: center;
   width: 80%;
 }
 
 .title-page-notes {
+  color: var(--color-notes);
   margin: 2em 0 0 auto;
   text-align: right;
   width: 80%;
 }
 
 .title-page-draft-date {
+  color: var(--color-draft-date);
   margin: 0 0 0 auto;
   text-align: right;
   width: 80%;
 }
 
 .title-page-date {
+  color: var(--color-date);
   margin: 0 0 0 auto;
   text-align: right;
   width: 80%;
 }
 
 .title-page-contact {
+  color: var(--color-contact);
   margin: 0 0 0 auto;
   text-align: right;
   width: 80%;
 }
 
 .title-page-copyright {
+  color: var(--color-copyright);
   margin: 2em auto 0 0;
   text-align: left;
   width: 80%;
 }
 
-.screen-heading {}
+.screen-heading {
+  color: var(--color-screen-heading);
+}
 
 .transition {
+  color: var(--color-transition);
   text-align: right;
 }
 
@@ -145,6 +170,7 @@ hr {
 }
 
 .character {
+  color: var(--color-character);
   margin: 1em 0 0 6em;
 }
 
@@ -192,6 +218,7 @@ hr {
 }
 
 .centered {
+  color: var(--color-centered);
   text-align: center;
 }
 
