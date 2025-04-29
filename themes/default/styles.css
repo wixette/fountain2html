@@ -10,14 +10,14 @@ body {
   background-color: #f8f8f8;
   border: 0;
   color: var(--color-default);
-  font-family: "Noto Sans SC", "Noto Sans TC", "Noto Sans JP",
+  font-family: "Noto Sans Mono", Menlo, Monaco, Consolas, "SFMono-Regular",
+    "Courier Prime", "Courier New", "Liberation Mono",
+    "DejaVu Sans Mono", monospace,
+    "Noto Sans SC", "Noto Sans TC", "Noto Sans JP",
     "Source Han Sans SC", "Source Han Sans TC", "Source Han Sans JP",
     "WenQuanYi Micro Hei", "Heiti SC", "Heiti TC",
     "Microsoft Yahei", "Microsoft JhengHei",
-    "Hiragino Kaku Gothic Pro", "Hiragino Sans GB", "Meiryo",
-    "MS Gothic", "Courier Prime", "Courier New", "Liberation Mono",
-    "Noto Sans Mono", Menlo, Monaco, Consolas, "SFMono-Regular",
-    "DejaVu Sans Mono", monospace;
+    "Hiragino Kaku Gothic Pro", "Hiragino Sans GB", "Meiryo";
   font-size: var(--font-size-screen);
   line-height: 1.5em;
   margin: 1in 1in 1in 1.25in; /* Standard screenplay margins */
@@ -131,7 +131,9 @@ br {}
 
 .screen-heading {}
 
-.transition {}
+.transition {
+  text-align: right;
+}
 
 .dialogue-block {
   margin: 0 auto;
