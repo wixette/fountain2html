@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fountain to HTML Formatter</title>
+    <title>Fountain to HTML: format, render and print .fountain screenplay files</title>
     <style>
         body {
             margin: 0;
@@ -30,7 +30,7 @@
         }
 
         #raw-content {
-            flex: 0.35; /* Changed from flex: 1 to flex: 0.35 (35%) */
+            flex: 0.32;
             padding: 10px;
             overflow-y: auto;
             border: 1px solid #ccc;
@@ -42,7 +42,7 @@
         }
 
         #html-render {
-            flex: 0.65; /* Changed from flex: 1 to flex: 0.65 (65%) */
+            flex: 0.68;
             padding: 10px;
             overflow-y: auto;
             border: 1px solid #ccc;
@@ -106,7 +106,7 @@
 <body>
     <div id="top-panel">
         <div id="file-drop-zone" class="toolbar-element" onclick="document.getElementById('file-upload').click()">
-            <span>Drop Fountain file here or click to browse</span>
+            <span>Drop or upload Fountain file here</span>
             <span class="filename-display" id="filename-display"></span>
         </div>
         <input type="file" class="toolbar-element" id="file-upload" accept=".fountain,.md,.txt">
