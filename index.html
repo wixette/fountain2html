@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fountain to HTML Formatter</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #top-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #main-app {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        #raw-content, #html-render {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+        }
+
+        #raw-content {
+            border-right: none;
+            white-space: pre-wrap;
+            line-height: 1.4;
+            background-color: #f8f8f8;
+            font-size: 14px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        #file-drop-zone {
+            color: #999;
+            display: flex;
+            align-items: center;
+            border-width: 1px;
+            border-style: dashed;
+            cursor: pointer;
+            flex-grow: 1;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        #file-drop-zone:hover, #file-drop-zone.dragover {
+            border-color: #888;
+            background-color: #f0f0f0;
+            color: #f90;
+        }
+
+        #file-upload {
+            display: none;
+        }
+
+        .filename-display {
+            color: #000;
+            font-weight: bold;
+            margin-left: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex-grow: 1;
+        }
+
+        .toolbar-element {
+            background-color: #f9f9f9;
+            border: 1px solid #999;
+            border-radius: 6px;
+            height: 48px;
+            padding: 0 10px;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="top-panel">
+        <div id="file-drop-zone" class="toolbar-element" onclick="document.getElementById('file-upload').click()">
+            <span>Drop Fountain file here or click to browse</span>
+            <span class="filename-display" id="filename-display"></span>
+        </div>
+        <input type="file" class="toolbar-element" id="file-upload" accept=".fountain,.md,.txt">
+        <button id="clear-button" class="toolbar-element">Clear</button>
+        <select id="theme-selector" class="toolbar-element">
+            <option value="default">Default Theme</option>
+            <option value="dark">Dark Theme</option>
+            <option value="cjk">CJK Theme</option>
+            <option value="ocean">Ocean Theme</option>
+            <option value="colorful">Colorful Theme</option>
+        </select>
+    </div>
+    <div id="main-app">
+        <div id="raw-content"></div>
+        <div id="html-render">
+            <iframe id="preview-frame"></iframe>
+        </div>
+    </div>
+
+    <script type="module">
+        import { parse } from './src/fountain_parser.js';
+        import { render } from './src/fountain_html_renderer.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileDropZone = document.getElementById('file-drop-zone');
+            const fileUpload = document.getElementById('file-upload');
+            const filenameDisplay = document.getElementById('filename-display');
+            const clearButton = document.getElementById('clear-button');
+            const rawContent = document.getElementById('raw-content');
+            const previewFrame = document.getElementById('preview-frame');
+            const themeSelector = document.getElementById('theme-selector');
+
+            let currentContent = '';
+
+            // Handle drag and drop events
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                fileDropZone.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                fileDropZone.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                fileDropZone.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                fileDropZone.classList.add('dragover');
+            }
+
+            function unhighlight() {
+                fileDropZone.classList.remove('dragover');
+            }
+
+            // Handle file drop
+            fileDropZone.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            }
+
+            // Handle file input change
+            fileUpload.addEventListener('change', function() {
+                handleFiles(this.files);
+            });
+
+            function handleFiles(files) {
+                if (files.length > 0) {
+                    const file = files[0];
+                    filenameDisplay.textContent = '[' + file.name + ']';
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const content = e.target.result;
+                        currentContent = content;
+                        rawContent.textContent = content;
+
+                        // Process the fountain content
+                        processFoundation(content);
+                    };
+                    reader.readAsText(file);
+                }
+            }
+
+            // Process fountain content and render to HTML
+            function processFoundation(fileContent) {
+                try {
+                    const theme = themeSelector.value;
+                    const fountainObject = parse(fileContent);
+                    const html = render(fountainObject, theme);
+
+                    // Display the HTML in the iframe
+                    const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                    doc.open();
+                    doc.write(html);
+                    doc.close();
+                } catch (error) {
+                    console.error('Error processing Fountain file:', error);
+                    const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                    doc.open();
+                    doc.write(`<html><body><h1>Error</h1><p>Failed to process Fountain file: ${error.message}</p></body></html>`);
+                    doc.close();
+                }
+            }
+
+            // Clear button functionality
+            clearButton.addEventListener('click', function() {
+                rawContent.textContent = '';
+                filenameDisplay.textContent = '';
+                fileUpload.value = '';
+                currentContent = '';
+                // Clear the rendered content
+                const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                doc.open();
+                doc.write('');
+                doc.close();
+            });
+
+            // Theme selector functionality
+            themeSelector.addEventListener('change', function() {
+                if (currentContent) {
+                    processFoundation(currentContent);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
