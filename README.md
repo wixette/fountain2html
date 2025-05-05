@@ -15,6 +15,13 @@ additional features:
 - `@media print` support, enabling page-break when printing
 - Predefined print-friendly themes, including colorful and high-contrast themes
 
+## Use the Web application
+
+Open `index.html` in your browser. You can drag and drop a .fountain file to
+the page, and it will be converted to HTML. You can also select a theme from the
+dropdown menu. The converted HTML will be rendered in the page and ready for
+printing.
+
 ## Use command-line utility
 
 Make sure you have Node.js and all yarn dependencies installed:
