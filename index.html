@@ -117,6 +117,7 @@
             <option value="ocean">Ocean Theme</option>
             <option value="colorful">Colorful Theme</option>
         </select>
+        <button id="print-button" class="toolbar-element">Print</button>
     </div>
     <div id="main-app">
         <div id="raw-content"></div>
@@ -137,6 +138,7 @@
             const rawContent = document.getElementById('raw-content');
             const previewFrame = document.getElementById('preview-frame');
             const themeSelector = document.getElementById('theme-selector');
+            const printButton = document.getElementById('print-button');
 
             let currentContent = '';
 
@@ -237,6 +239,27 @@
             themeSelector.addEventListener('change', function() {
                 if (currentContent) {
                     processFoundation(currentContent);
+                }
+            });
+
+            // Print button functionality
+            printButton.addEventListener('click', function() {
+                // Check if the iframe has content
+                if (currentContent) {
+                    try {
+                        // Access the iframe's content window and trigger print
+                        const frameWindow = previewFrame.contentWindow;
+                        if (frameWindow) {
+                            frameWindow.focus(); // Focus on the iframe
+                            frameWindow.print(); // Trigger the print dialog
+                        } else {
+                            console.error('Could not access iframe content window');
+                        }
+                    } catch (error) {
+                        console.error('Error printing iframe content:', error);
+                    }
+                } else {
+                    alert('No content to print. Please load a file first.');
                 }
             });
         });
