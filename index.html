@@ -28,19 +28,23 @@
             overflow: hidden;
         }
 
-        #raw-content, #html-render {
-            flex: 1;
+        #raw-content {
+            flex: 0.35; /* Changed from flex: 1 to flex: 0.35 (35%) */
             padding: 10px;
             overflow-y: auto;
             border: 1px solid #ccc;
-        }
-
-        #raw-content {
             border-right: none;
             white-space: pre-wrap;
             line-height: 1.4;
             background-color: #f8f8f8;
             font-size: 14px;
+        }
+
+        #html-render {
+            flex: 0.65; /* Changed from flex: 1 to flex: 0.65 (65%) */
+            padding: 10px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
         }
 
         iframe {
@@ -90,7 +94,7 @@
             background-color: #f9f9f9;
             border: 1px solid #999;
             border-radius: 6px;
-            height: 48px;
+            height: 40px;
             padding: 0 10px;
             margin: 0 10px;
             display: flex;
