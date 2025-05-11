@@ -1,6 +1,6 @@
 # fountain2html
 
-> 中文版说明请见 [README.zh.md](README.zh.md)
+> 中文说明请见 [README.zh.md](README.zh.md)
 
 A simple Node/JavaScript module to convert .fountain screenplays to HTML format,
 with non-latin charset support.
