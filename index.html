@@ -14,38 +14,98 @@
             height: 100vh;
         }
 
-        #top-panel {
+        #header-panel {
+            background-color: #000;
+            color: #f9f9f9;
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            background-color: #f4f4f4;
-            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        #header-panel > .title {
+            color: #9cf;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 40px;
+        }
+
+        #header-panel > .notes {
+            flex: 1;
+        }
+
+        #header-panel > .notes, #header-panel > .notes > p {
+            margin: 0 10px 0 0;
+            padding: 0;
+            font-size: 12px;
+            line-height: 16px;
+        }
+
+        #header-panel a, #header-panel a:visited, #header-panel a:hover {
+            color: #9cf;
+            text-decoration: none;
+        }
+
+        #top-panel {
+            background-color: #9cf;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            width: 100%;
         }
 
         #main-app {
             display: flex;
             flex: 1;
             overflow: hidden;
+            width: 100%;
         }
 
-        #raw-content {
+        #footer-panel {
+            background-color: #000;
+            color: #f9f9f9;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 12px;
+            width: 100%;
+        }
+
+        #footer-panel a, #footer-panel a:visited, #footer-panel a:hover {
+            color: #9cf;
+            text-decoration: none;
+        }
+
+        #fountain-editor {
             flex: 0.32;
             padding: 10px;
             overflow-y: auto;
-            border: 1px solid #ccc;
+            border: 1px solid #9cf;
             border-right: none;
             white-space: pre-wrap;
             line-height: 1.4;
-            background-color: #f8f8f8;
             font-size: 14px;
+            resize: none;
+            font-family: 'Courier New', Courier, monospace;
+            outline: none;
         }
 
         #html-render {
             flex: 0.68;
-            padding: 10px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid #9cf;
+        }
+
+        #html-render iframe {
+            border: 0;
+            margin: 0;
+            padding: 0;
         }
 
         iframe {
@@ -92,9 +152,9 @@
 
         .toolbar-element {
             background-color: #f9f9f9;
-            border: 1px solid #999;
+            border: 1px solid #9cf;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 14px;
             height: 40px;
             padding: 0 10px;
             margin: 0 10px;
@@ -104,6 +164,17 @@
     </style>
 </head>
 <body>
+    <div id="header-panel">
+        <div class="title">Fountain to HTML</div>
+        <div class="notes">
+            <p>Fountain is a simple markup syntax for writing, editing and
+            sharing screenplays. See <a href="https://fountain.io/"
+            target="_blank">fountain.io</a> for more info. You can upload a
+            .fountain file or input your screenplay text directly. The rendered
+            HTML can be printed or saved as a PDF. Non-latin charset (e.g.
+            Chinese character names with the @ syntax) are supported.</p>
+        </div>
+    </div>
     <div id="top-panel">
         <div id="file-drop-zone" class="toolbar-element" onclick="document.getElementById('file-upload').click()">
             <span>Drop or upload Fountain file here</span>
@@ -121,10 +192,13 @@
         <button id="print-button" class="toolbar-element">Print</button>
     </div>
     <div id="main-app">
-        <div id="raw-content"></div>
+        <textarea id="fountain-editor" spellcheck="false" placeholder="Screenplay in Fountain format"></textarea>
         <div id="html-render">
             <iframe id="preview-frame"></iframe>
         </div>
+    </div>
+    <div id="footer-panel">
+        <div>&copy; 2025 <a href="https://github.com/wixette/fountain2html" target="_blank">Source Code</a></div>
     </div>
 
     <script type="module">
@@ -136,12 +210,19 @@
             const fileUpload = document.getElementById('file-upload');
             const filenameDisplay = document.getElementById('filename-display');
             const clearButton = document.getElementById('clear-button');
-            const rawContent = document.getElementById('raw-content');
+            const fountainEditor = document.getElementById('fountain-editor');
             const previewFrame = document.getElementById('preview-frame');
             const themeSelector = document.getElementById('theme-selector');
             const printButton = document.getElementById('print-button');
 
             let currentContent = '';
+            fountainEditor.focus();
+
+            // Listen for changes in the editor
+            fountainEditor.addEventListener('input', function() {
+                currentContent = this.value;
+                processFoundation(currentContent);
+            });
 
             // Handle drag and drop events
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -193,9 +274,7 @@
                     reader.onload = function(e) {
                         const content = e.target.result;
                         currentContent = content;
-                        rawContent.textContent = content;
-
-                        // Process the fountain content
+                        fountainEditor.value = content;
                         processFoundation(content);
                     };
                     reader.readAsText(file);
@@ -225,7 +304,7 @@
 
             // Clear button functionality
             clearButton.addEventListener('click', function() {
-                rawContent.textContent = '';
+                fountainEditor.value = '';
                 filenameDisplay.textContent = '';
                 fileUpload.value = '';
                 currentContent = '';
