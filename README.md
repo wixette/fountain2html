@@ -1,5 +1,7 @@
 # fountain2html
 
+> 中文版说明请见 [README.zh.md](README.zh.md)
+
 A simple Node/JavaScript module to convert .fountain screenplays to HTML format,
 with non-latin charset support.
 
@@ -27,9 +29,11 @@ to use the web application.
 
 You can also host and run `index.html` locally with any web server.
 
-In the web app, you can drag and drop, or upload a .fountain file to the page,
-and it will be converted to HTML. You can also select a theme from the dropdown
-menu. The converted HTML will be rendered in the page and ready for printing.
+In the web app, you can drag and drop, or upload a .fountain file to the page.
+You can also input the screenplay text directly. The Fountain content will be
+converted to HTML automatically. Then you can select a theme from the dropdown
+menu. The converted HTML will be rendered in the page and ready for printing (to
+a PDF file or to papers).
 
 ## Use the command-line utility
 
