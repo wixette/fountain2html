@@ -44,7 +44,7 @@ const RE = {
   // Sorted alphabetically.
   BONEYARD: /\/\*.*?\*\//gms,
   CENTERED: /^(?:> *)(.+)(?: *<)(\n.+)*/g,
-  DIALOGUE: /^(@.+|[A-Z*_]+[0-9A-Z (._\-')]*)(\^?)?(?:\n(?!\n+))([\s\S]+)/,
+  DIALOGUE: /^(@[^^\n]+|[A-Z*_]+[0-9A-Z (._\-')]*)(\^?)?(?:\n(?!\n+))([\s\S]+)/,
   EXTRA_LINE_BREAKS: /^\n+|\n+$/,
   EXTRA_WHITESPACES: /^\t+|^ {3,}/gm,
   LINE_BREAKS: /\r\n|\r/g,

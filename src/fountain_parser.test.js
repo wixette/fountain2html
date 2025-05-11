@@ -101,6 +101,12 @@ Screw retirement.
 
 @non-capitalized character
 Screw retirement.
+
+@小明
+你好！
+
+@小红^
+你好！
 `
 
 const TEXT_7 = `/* Sections and synopsis. */
@@ -251,7 +257,7 @@ test('parser: transition', () => {
 
 test('parser: dialogues', () => {
   let result = parse(TEXT_6);
-  assert.strictEqual(result.tokens.length, 29);
+  assert.strictEqual(result.tokens.length, 39);
 
   assert.strictEqual(result.tokens[0].type, TokenType.DIALOGUE_BEGIN);
   assert.strictEqual(result.tokens[0].dual, DualPosition.UNKNOWN);
@@ -331,6 +337,32 @@ test('parser: dialogues', () => {
   assert.strictEqual(result.tokens[27].text, 'Screw retirement.');
 
   assert.strictEqual(result.tokens[28].type, TokenType.DIALOGUE_END);
+
+  assert.strictEqual(result.tokens[29].type, TokenType.DUAL_DIALOGUE_BEGIN);
+
+  assert.strictEqual(result.tokens[30].type, TokenType.DIALOGUE_BEGIN);
+  assert.strictEqual(result.tokens[30].dual, DualPosition.LEFT);
+
+  assert.strictEqual(result.tokens[31].type, TokenType.CHARACTER);
+  assert.strictEqual(result.tokens[31].text, '小明');
+
+  assert.strictEqual(result.tokens[32].type, TokenType.DIALOGUE);
+  assert.strictEqual(result.tokens[32].text, '你好！');
+
+  assert.strictEqual(result.tokens[33].type, TokenType.DIALOGUE_END);
+
+  assert.strictEqual(result.tokens[34].type, TokenType.DIALOGUE_BEGIN);
+  assert.strictEqual(result.tokens[34].dual, DualPosition.RIGHT);
+
+  assert.strictEqual(result.tokens[35].type, TokenType.CHARACTER);
+  assert.strictEqual(result.tokens[35].text, '小红');
+
+  assert.strictEqual(result.tokens[36].type, TokenType.DIALOGUE);
+  assert.strictEqual(result.tokens[36].text, '你好！');
+
+  assert.strictEqual(result.tokens[37].type, TokenType.DIALOGUE_END);
+
+  assert.strictEqual(result.tokens[38].type, TokenType.DUAL_DIALOGUE_END);
 });
 
 test('parser: sections and synopsis', () => {
